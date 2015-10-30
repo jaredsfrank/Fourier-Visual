@@ -2,13 +2,31 @@
 function f(x){
     var ans = Math.sin(x);
 }
-
+//Square Function
 function h(x, m){
     var ans = 0;
     for (n=1; n<=m; n++){
         ans += 4/((2*n-1)*Math.PI)*Math.sin(.5*(2*n-1)*Math.PI*x);
     }
     return Math.round(ans*1000)/1000;
+}
+//Y=x^2
+function g(x,m){
+  var ans = 0;
+  for (n=1; n<=m; n++){
+    ans+=4*Math.pow(-1,n)/(n*n)*Math.cos(n*x)
+  }
+  return Math.round(ans*1000)/1000;
+}
+
+//Other
+function j(x,m){
+  var ans = Math.PI;
+  for (n=1; n<=m; n++){
+    ans+= 2/(n*n*Math.PI)*(Math.pow(-1,n)-1)*Math.cos(n*x);
+    ans-= 1/n*(1+Math.pow(-1,n))*Math.sin(n*x);
+  }
+  return Math.round(ans*1000)/1000;
 }
 
 function calcPoints (start, end, interval, f){
@@ -27,7 +45,7 @@ function calcPointsFourrier (start, end, interval, f, m){
     return accum;
 }
 
-var lineData = calcPointsFourrier(-Math.PI, Math.PI, .01, h, 100);
+var lineData = calcPointsFourrier(-Math.PI, 5*Math.PI, .02, j, 100);
 
 
 var vis = d3.select('#visualisation'),
@@ -101,10 +119,10 @@ function draw(lineData) {
 }
 
 
-d3.select('body').append('input').attr('type','range').attr('min',"0").attr('max',"400").attr('value',start)
+d3.select('body').append('input').attr('type','range').attr('min',"0").attr('max',"200").attr('value',start)
   .on("input", function(){
     var new_val = this.value;
-    var new_data = calcPointsFourrier(-Math.PI, Math.PI, .005, h, new_val);
+    var new_data = calcPointsFourrier(-Math.PI, 5*Math.PI, .02, j, new_val);
     d3.select('.label').text("m = "+new_val)
     draw(new_data);})
 
